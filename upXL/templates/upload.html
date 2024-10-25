@@ -10,15 +10,13 @@
             margin: 0;
             padding: 0;
             background-color: #ffffff;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column; 
+            justify-content: center; 
         }
 
         .upload-container {
-            position: absolute; 
-            top: 50px; 
-            left: 50px; 
-            right: 50px; 
-            bottom: 50px; 
+            margin: 50px; 
             border: 3px dashed #999; 
             border-radius: 10px;
             display: flex;
@@ -28,6 +26,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
             box-sizing: border-box;
+            flex: 1; 
         }
 
         .upload-container.dragover {
@@ -37,11 +36,18 @@
         input[type="file"] {
             display: none;
         }
-        
+
         p {
             font-size: 18px;
             color: #666;
             text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: -20px;
+            padding: 0px 0;
+            position: relative;
         }
     </style>
 </head>
@@ -54,6 +60,10 @@
             <input type="file" id="fileInput" name="file" accept=".csv,.xlsx">
         </form>
     </div>
+
+    <footer>
+        <p>Made with <span style="font-size:110%;color:red;">♥</span> by <a href="https://github.com/Arun0A">Arun Bhattacharya</a> for Medius Technologies Pvt. Ltd.</p>
+    </footer>
 
     <script>
         const dropArea = document.getElementById('drop-area');
