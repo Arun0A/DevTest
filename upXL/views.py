@@ -11,11 +11,9 @@ def display(request):
 
 def upload_file(request):
     if request.method == 'POST':
-        # Check if a file was submitted
         if request.FILES.get('file', None):
             file = request.FILES['file']
             
-            # Check the file type and read it accordingly
             if file.name.endswith('.csv'):
                 data = pd.read_csv(file)
             elif file.name.endswith('.xls') or file.name.endswith('.xlsx'):
@@ -25,10 +23,13 @@ def upload_file(request):
                     'error': 'Unsupported file type. Please upload a CSV or Excel file.'
                 })
             
-            # Convert the data to HTML for displaying
+            try:
+                data = data[['Cust State','Cust Pin','DPD']]
+            except:
+                pass
+            
             table_html = data.to_html(classes='table table-striped', index=False)
             
-            # Render the display.html template with the data
             return render(request, 'display.html', {'table': table_html})
 
         else:

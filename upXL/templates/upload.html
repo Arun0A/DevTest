@@ -5,48 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File</title>
     <style>
-        /* CSS for your interactive upload button */
-        .upload-container {
-            position: relative;
-            width: 100%;
+        body, html {
             height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            overflow: hidden;
         }
 
-        .upload-button {
+        .upload-container {
+            position: absolute; 
+            top: 50px; 
+            left: 50px; 
+            right: 50px; 
+            bottom: 50px; 
+            border: 3px dashed #999; 
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 200px;
-            height: 60px;
-            background-color: #007bff;
-            color: white;
-            font-size: 18px;
-            border-radius: 8px;
+            background-color: #f9f9f9;
             cursor: pointer;
-            transition: transform 0.3s ease-in-out;
+            transition: background-color 0.3s ease;
+            box-sizing: border-box;
         }
 
-        .upload-button:hover {
-            background-color: #0056b3;
+        .upload-container.dragover {
+            background-color: #e3e3e3;
         }
 
         input[type="file"] {
             display: none;
         }
+        
+        p {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="upload-container">
-        <form method="post" enctype="multipart/form-data">
+    <div class="upload-container" id="drop-area">
+        <p>Drag & Drop a file here, or click to upload</p>
+        <form method="post" enctype="multipart/form-data" id="uploadForm">
             {% csrf_token %}
-            <label for="fileUpload" class="upload-button">Upload File</label>
-            <input type="file" id="fileUpload" name="file">
-            <button type="submit" class="upload-button" style="margin-left: 20px;">Submit</button>
+            {% load static %}
+            <input type="file" id="fileInput" name="file" accept=".csv,.xlsx">
         </form>
     </div>
+
+    <script>
+        const dropArea = document.getElementById('drop-area');
+        const fileInput = document.getElementById('fileInput');
+        const form = document.getElementById('uploadForm');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.add('dragover'), false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, () => dropArea.classList.remove('dragover'), false);
+        });
+
+        dropArea.addEventListener('drop', handleDrop, false);
+
+        dropArea.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 1) {
+                alert('Please upload only one file at a time.');
+                return;
+            }
+            fileInput.files = files;
+            if (fileInput.files.length > 0) {
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>
