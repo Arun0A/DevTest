@@ -5,9 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display File Data</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /* Style for the header row */
+        .table-responsive table thead tr {
+            background-color: yellow;
+            text-align: center;
+            margin: 0 auto;
+            width: auto;
+        }
+
+        .table-responsive table thead th {
+            text-align: center;
+        }
+
+        .table-responsive table td{
+            text-align: center;
+            background-color: white;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-5">
+        <a href="{% url 'upload_file' %}" class="btn btn-primary mb-4">← Upload another file</a>
         <h2 class="mb-4">Uploaded File Data</h2>
         <div class="table-responsive">
             {{ table|safe }}
